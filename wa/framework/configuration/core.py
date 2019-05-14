@@ -290,11 +290,11 @@ class ConfigurationPoint(object):
         else:
             try:
                 value = self.kind(value)
-            except (ValueError, TypeError):
+            except (ValueError, TypeError) as e:
                 typename = get_type_name(self.kind)
-                msg = 'Bad value "{}" for {}; must be {} {}'
+                msg = 'Bad value "{}" for {}; must be {} {} [{}]'
                 article = get_article(typename)
-                raise ConfigError(msg.format(value, self.name, article, typename))
+                raise ConfigError(msg.format(value, self.name, article, typename, e))
         if value is not None:
             self.validate_value(self.name, value)
         if self.merge and hasattr(obj, self.name):
